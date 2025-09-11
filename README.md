@@ -120,4 +120,4 @@ Interact freely and ask follow-up questions.
 
 Follow the suggestions provided for healthier and glowing skin.
 
-✅ Live Preview : https://glow-care-tcmk.vercel.app/
+✅ Live Preview : https://glow-care-demo.vercel.app/
