@@ -1,5 +1,11 @@
 import { useState, useRef, useEffect } from "react";
+import Groq from "groq-sdk/index.mjs";
 import { Send } from "lucide-react";
+
+const groq = new Groq({
+  apiKey: import.meta.env.VITE_GROQ_API_KEY,
+  dangerouslyAllowBrowser: true,
+});
 
 function DermatologistChat() {
   const [messages, setMessages] = useState([]);
@@ -24,16 +30,22 @@ function DermatologistChat() {
     setAutoScroll(true);
 
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input }),
+      const completion = await groq.chat.completions.create({
+        model: "openai/gpt-oss-20b",
+        messages: [
+          { role: "system", content: "You are Dr. Derma, a friendly dermatologist." },
+          { role: "user", content: input },
+        ],
       });
-      const data = await res.json();
-      const botMessage = data.choices[0]?.message?.content || "Sorry, I couldn't respond.";
+
+      const botMessage =
+        completion.choices[0]?.message?.content || "Sorry, I couldn't respond.";
       setMessages((prev) => [...prev, { sender: "bot", text: botMessage }]);
     } catch {
-      setMessages((prev) => [...prev, { sender: "bot", text: "Error connecting to API" }]);
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", text: "Error connecting to Groq API" },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -42,13 +54,12 @@ function DermatologistChat() {
   return (
     <div id="chat" className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-50 to-blue-100 p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl w-full">
-        
         {/* Left Side - GlowCare Info */}
         <div className="flex flex-col justify-center text-gray-800 space-y-4">
           <h1 className="text-4xl font-bold text-blue-600">GlowCare</h1>
           <p className="text-lg leading-relaxed">
             GlowCare is your trusted partner in skincare.  
-            Ask <span className="font-semibold text-blue-500">Dr. Derma </span> 
+            Ask <span className="font-semibold text-blue-500">Dr. Derma</span> 
             anything about skin health, treatments, or daily care tips.  
             Get professional advice instantly.
           </p>
@@ -91,7 +102,9 @@ function DermatologistChat() {
             {messages.map((msg, i) => (
               <div
                 key={i}
-                className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                className={`flex ${
+                  msg.sender === "user" ? "justify-end" : "justify-start"
+                }`}
               >
                 <div
                   className={`px-4 py-2 rounded-lg max-w-[75%] ${
@@ -139,4 +152,4 @@ function DermatologistChat() {
   );
 }
 
-export default DermatologistChat;
+export default DermatologistChat;  
