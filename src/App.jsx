@@ -7,12 +7,14 @@ import SkinChecker from './component/SkinChecker'
 import Service from './component/Services'
 import NearbyMap from './component/Nearby'
 import Footer from './component/Footer'
+import SkincareNotification from './component/SkincareNotification'
 
 const App = () => {
   return (
     <div>
       <Navbar/>
       <Hero/>
+      <SkincareNotification/>
       <SkincareChat/>
       <About/>
       <SkinChecker/>
