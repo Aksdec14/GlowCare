@@ -8,6 +8,7 @@ import Service from './component/Services'
 import NearbyMap from './component/Nearby'
 import Footer from './component/Footer'
 import SkincareNotification from './component/SkincareNotification'
+import SkincareAnalyzer from './component/SkincareAnalyzer'
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
       <Hero/>
       <SkincareNotification/>
       <SkincareChat/>
+      <SkincareAnalyzer/>
       <About/>
       <SkinChecker/>
       <Service/>
